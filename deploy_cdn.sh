@@ -3,7 +3,7 @@
 # Nginx conf settings
 export NGINX_TEMPLATE=https://raw.githubusercontent.com/eugeneyu/custom-reverse-proxy/master/openresty/nginx/conf/nginx_basic_proxy.conf
 export CDN_CACHE_EXPIRE=604800
-export ORIGIN_URL=www.google.com
+export ORIGIN_URL=https://www.google.com
 export API_GATEWAY_URL=http://huya-live.mocklab.io/cdngw/backstreamurl
 export REDIS_IP=10.150.216.116
 export REDIRECT_CACHE_EXPIRE=60
