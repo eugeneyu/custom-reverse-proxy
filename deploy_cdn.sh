@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Nginx conf settings
+export NGINX_TEMPLATE=https://raw.githubusercontent.com/eugeneyu/custom-reverse-proxy/master/openresty/nginx/conf/nginx_basic_proxy.conf
+export CDN_CACHE_EXPIRE=604800
+export ORIGIN_URL=www.google.com
+export API_GATEWAY_URL=http://huya-live.mocklab.io/cdngw/backstreamurl
+export REDIS_IP=10.150.216.116
+export REDIRECT_CACHE_EXPIRE=60
+
+# gcloud command settings
 export PROJECT_ID=youzhi-lab
 export BASE_INSTANCE_NAME=huya-cdn-proxy-base
 export IMAGE_NAME=huya-cdn-proxy-base-image
@@ -23,14 +32,16 @@ gcloud compute images create $IMAGE_NAME --project=$PROJECT_ID --source-disk=$BA
 	
 # 3. Create instance template
 
-export API_GATEWAY_URL=http://huya-live.mocklab.io/cdngw/backstreamurl
-export REDIS_IP=10.150.216.116
-export REDIRECT_CACHE_EXPIRE=60
-
-envsubst '${API_GATEWAY_URL} ${REDIS_IP} ${REDIRECT_CACHE_EXPIRE}' < ./nginx.conf > ./new_nginx.conf
-
-
-gcloud beta compute --project=$PROJECT_ID instance-templates create $INSTANCE_TEMPLATE_NAME --machine-type=n1-standard-4 --network-tier=PREMIUM --maintenance-policy=MIGRATE --tags=cdn-proxy,http-server,https-server --image=$IMAGE_NAME --image-project=$PROJECT_ID --boot-disk-size=100GB --boot-disk-type=pd-standard --boot-disk-device-name=$INSTANCE_TEMPLATE_NAME --reservation-affinity=any --metadata=startup-script=\#\!/bin/bash$'\n'$'\n'export\ API_GATEWAY_URL=http://huya-live.mocklab.io/cdngw/backstreamurl$'\n'export\ REDIS_IP=10.150.216.116$'\n'export\ REDIRECT_CACHE_EXPIRE=30$'\n'$'\n'wget\ https://raw.githubusercontent.com/eugeneyu/custom-reverse-proxy/master/openresty/nginx/conf/nginx.conf\ --output-document=nginx.conf$'\n'$'\n'cp\ /usr/local/openresty/nginx/conf/nginx.conf\ /usr/local/openresty/nginx/conf/nginx_def.conf$'\n'$'\n'envsubst\ \'\$\{API_GATEWAY_URL\}\ \$\{REDIS_IP\}\ \$\{REDIRECT_CACHE_EXPIRE\}\'\ \<\ ./nginx.conf\ \>\ /usr/local/openresty/nginx/conf/nginx.conf$'\n'$'\n'systemctl\ restart\ openresty
+gcloud beta compute --project=$PROJECT_ID instance-templates create $INSTANCE_TEMPLATE_NAME --machine-type=n1-standard-4 --network-tier=PREMIUM --maintenance-policy=MIGRATE --tags=cdn-proxy,http-server,https-server --image=$IMAGE_NAME --image-project=$PROJECT_ID --boot-disk-size=100GB --boot-disk-type=pd-standard --boot-disk-device-name=$INSTANCE_TEMPLATE_NAME --reservation-affinity=any --metadata=startup-script="#! /bin/bash
+export NGINX_TEMPLATE=${NGINX_TEMPLATE}
+export CDN_CACHE_EXPIRE=${CDN_CACHE_EXPIRE}
+export API_GATEWAY_URL=${API_GATEWAY_URL}
+export REDIS_IP=${REDIS_IP}
+export REDIRECT_CACHE_EXPIRE=${REDIRECT_CACHE_EXPIRE}
+wget $NGINX_TEMPLATE --output-document=nginx.conf
+cp /usr/local/openresty/nginx/conf/nginx.conf /usr/local/openresty/nginx/conf/nginx_def.conf
+envsubst '\${NGINX_TEMPLATE} \${CDN_CACHE_EXPIRE} \${API_GATEWAY_URL} \${REDIS_IP} \${REDIRECT_CACHE_EXPIRE}' < ./nginx.conf > /usr/local/openresty/nginx/conf/nginx.conf
+systemctl restart openresty"
 
 # 4. Create Instance Group
 
