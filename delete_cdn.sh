@@ -25,7 +25,7 @@ gcloud compute backend-services delete $BACKEND_NAME --global --quiet
 
 gcloud beta compute --project=$PROJECT_ID instance-groups managed delete $INSTANCE_GROUP_NAME --region=$REGION --quiet
 
-gcloud compute health-checks delete http $HEALTHCHECK_NAME --project=$PROJECT_ID --quiet
+gcloud compute health-checks delete $HEALTHCHECK_NAME --project=$PROJECT_ID --quiet
 
 gcloud beta compute --project=$PROJECT_ID instance-templates delete $INSTANCE_TEMPLATE_NAME --quiet
 
