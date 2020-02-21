@@ -10,15 +10,15 @@ export REDIRECT_CACHE_EXPIRE=60
 
 # gcloud command settings
 export PROJECT_ID=youzhi-lab
-export BASE_INSTANCE_NAME=huya-cdn-proxy-base
-export IMAGE_NAME=huya-cdn-proxy-base-image
-export INSTANCE_TEMPLATE_NAME=huya-cdn-proxy-ig-temp-v1
-export HEALTHCHECK_NAME=healthckeck-cdn-proxy
-export INSTANCE_GROUP_NAME=ig-huya-cdn-proxy
-export BACKEND_NAME=bs-huya-cdn-proxy
-export URLMAP_NAME=glb-huya-cdn
-export TARGET_PROXY_NAME=target-huya-cdn-proxy
-export FORWARD_RULE_NAME=forward-rule-huya-cdn-proxy
+export BASE_INSTANCE_NAME=google-cdn-proxy-base
+export IMAGE_NAME=google-cdn-proxy-base-image
+export INSTANCE_TEMPLATE_NAME=google-cdn-proxy-ig-temp-v1
+export HEALTHCHECK_NAME=healthckeck-google-cdn-proxy
+export INSTANCE_GROUP_NAME=ig-google-cdn-proxy
+export BACKEND_NAME=bs-google-cdn-proxy
+export URLMAP_NAME=glb-google-cdn
+export TARGET_PROXY_NAME=target-google-cdn-proxy
+export FORWARD_RULE_NAME=forward-rule-google-cdn-proxy
 export REGION=asia-east2
 export ZONE=asia-east2-a
 export INSTANCE_GROUP_ZONES=asia-east2-a,asia-east2-b,asia-east2-c
