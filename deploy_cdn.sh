@@ -33,7 +33,7 @@ gcloud compute images create $IMAGE_NAME --project=$PROJECT_ID --source-disk=$BA
 # 3. Create instance template
 
 gcloud beta compute --project=$PROJECT_ID instance-templates create $INSTANCE_TEMPLATE_NAME --machine-type=n1-standard-4 --network-tier=PREMIUM --maintenance-policy=MIGRATE --tags=cdn-proxy,http-server,https-server --image=$IMAGE_NAME --image-project=$PROJECT_ID --boot-disk-size=100GB --boot-disk-type=pd-standard --boot-disk-device-name=$INSTANCE_TEMPLATE_NAME --reservation-affinity=any --metadata=startup-script="#! /bin/bash
-export NGINX_TEMPLATE=${NGINX_TEMPLATE}
+export ORIGIN_URL=${ORIGIN_URL}
 export CDN_CACHE_EXPIRE=${CDN_CACHE_EXPIRE}
 export API_GATEWAY_URL=${API_GATEWAY_URL}
 export REDIS_IP=${REDIS_IP}
