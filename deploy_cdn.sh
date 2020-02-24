@@ -10,6 +10,7 @@ export REDIS_IP=10.150.216.116
 export REDIRECT_CACHE_EXPIRE=60
 
 # gcloud command settings
+# Update to your own choice of naming and region
 export PROJECT_ID=youzhi-lab
 export BASE_INSTANCE_NAME=google-cdn-proxy-base
 export IMAGE_NAME=google-cdn-proxy-base-image
