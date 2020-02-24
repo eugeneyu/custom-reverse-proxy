@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Nginx conf settings
+# For basic CDN deployment with nginx_basic_proxy.conf, only CDN_CACHE_EXPIRE and ORIGIN_URL need to be updated before deploying.
 export NGINX_TEMPLATE=https://raw.githubusercontent.com/eugeneyu/custom-reverse-proxy/master/openresty/nginx/conf/nginx_basic_proxy.conf
 export CDN_CACHE_EXPIRE=604800
 export ORIGIN_URL=https://www.google.com
