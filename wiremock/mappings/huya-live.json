@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPathPattern": "/cdngw/backstreamurl"
+    },
+    "response": {
+        "status": 302,
+        "body": "",
+        "headers": {
+            "Location": "http://huya-wiremock.firstary.top/live/su1799511837978r00904dfedc20245f6f1fd894947929f2.m3u8?wsSecret=148bd3a3d096faec91fc78d0965a6553&wsTime=5b5992f1"
+        }
+    }
+}

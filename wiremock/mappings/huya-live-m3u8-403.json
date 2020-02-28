@@ -1,0 +1,10 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPathPattern": "/live/.+\\.m3u8"
+    },
+    "response": {
+        "status": 403,
+        "fixedDelayMilliseconds": 2000
+    }
+}
