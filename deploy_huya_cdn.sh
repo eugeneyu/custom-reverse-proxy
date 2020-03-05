@@ -6,7 +6,8 @@ export CDN_CACHE_EXPIRE=604800
 export ORIGIN_URL=www.google.com
 export API_GATEWAY_URL=http://huya-live.mocklab.io/cdngw/backstreamurl
 export REDIS_IP=10.150.216.116
-export REDIRECT_CACHE_EXPIRE=60
+export REDIRECT_CACHE_EXPIRE=86400
+export API_GATEWAY_APP=altest.hls.nimo.tv
 
 # gcloud command settings
 export PROJECT_ID=youzhi-lab
@@ -38,9 +39,11 @@ export CDN_CACHE_EXPIRE=${CDN_CACHE_EXPIRE}
 export API_GATEWAY_URL=${API_GATEWAY_URL}
 export REDIS_IP=${REDIS_IP}
 export REDIRECT_CACHE_EXPIRE=${REDIRECT_CACHE_EXPIRE}
+export API_GATEWAY_APP=${API_GATEWAY_APP}
+export EXTERNAL_IP=`curl -H "Metadata-Flavor: Google" httcomputeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip`
 wget $NGINX_TEMPLATE --output-document=nginx.conf
 cp /usr/local/openresty/nginx/conf/nginx.conf /usr/local/openresty/nginx/conf/nginx_def.conf
-envsubst '\${NGINX_TEMPLATE} \${CDN_CACHE_EXPIRE} \${API_GATEWAY_URL} \${REDIS_IP} \${REDIRECT_CACHE_EXPIRE}' < ./nginx.conf > /usr/local/openresty/nginx/conf/nginx.conf
+envsubst '\${NGINX_TEMPLATE} \${CDN_CACHE_EXPIRE} \${API_GATEWAY_URL} \${REDIS_IP} \${REDIRECT_CACHE_EXPIRE} \${API_GATEWAY_APP} \${EXTERNAL_IP}' < ./nginx.conf > /usr/local/openresty/nginx/conf/nginx.conf
 systemctl restart openresty"
 
 # 4. Create Instance Group
