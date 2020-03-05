@@ -26,7 +26,7 @@ export INSTANCE_GROUP_ZONES=asia-east2-a,asia-east2-b,asia-east2-c
 
 # 1. Create base VM, with openresty installed
 gcloud beta compute --project=$PROJECT_ID instances create $BASE_INSTANCE_NAME --zone=$ZONE --machine-type=n1-standard-1 --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --tags=cdn-proxy,http-server,https-server --image=ubuntu-1804-bionic-v20200129a --image-project=ubuntu-os-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=$BASE_INSTANCE_NAME --reservation-affinity=any --metadata=startup-script=wget\ -O\ -\ https://raw.githubusercontent.com/eugeneyu/custom-reverse-proxy/master/openresty/gce_startup.sh\ \|\ bash
-
+sleep 60
 	
 # 2. Create custom Image
 gcloud compute images create $IMAGE_NAME --project=$PROJECT_ID --source-disk=$BASE_INSTANCE_NAME --source-disk-zone=$ZONE --storage-location=$REGION --force
