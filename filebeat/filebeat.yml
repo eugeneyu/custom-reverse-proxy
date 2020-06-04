@@ -83,7 +83,7 @@ setup.template.pattern: "huya-*"
 setup.template.overwrite: true
 
 setup.template.settings:
-  index.number_of_shards: 3
+  index.number_of_shards: 4 
   #index.codec: best_compression
   #_source.enabled: false
 
