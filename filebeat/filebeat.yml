@@ -162,7 +162,7 @@ output.elasticsearch:
   username: "$ES_USER"
   password: "$ES_PASSWORD"
 
-  index: "huya-%{[beat.version]}-%{+yyyy.MM}"
+  index: "huya-%{[agent.version]}-%{+yyyy.MM}"
 
 #----------------------------- Logstash output --------------------------------
 #output.logstash:
