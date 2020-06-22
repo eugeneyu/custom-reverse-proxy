@@ -1,0 +1,89 @@
+PUT _ingest/pipeline/huya
+{
+  "description" : "Parse Huya Nginx logs",
+  "processors": [
+    {
+      "drop": {
+        "if": "ctx['message'].contains('GoogleHC')"
+      }
+    },
+    {
+      "grok": {
+          "field": "message",
+          "ignore_failure" : true,
+          "patterns": ["%{STREAMID:stream_id}"],
+          "pattern_definitions" : {
+          "STREAMID" : "su[a-z0-9]+"
+        }
+      }
+    },
+    {
+      "grok": {
+        "if": "ctx['log']['file']['path'].contains('/usr/local/openresty/nginx/logs/upstream.log')",
+        "field": "message",
+        "ignore_failure" : true,
+        "patterns": ["%{COMMONAPACHELOGX}"],
+        "pattern_definitions" : {
+          "COMMONAPACHELOGX" : "%{IPORHOST:clientip} %{HTTPDUSER:ident} %{USER:auth} \\[%{HTTPDATE:timestamp_ngx}\\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})\" %{NUMBER:response} (?:%{NUMBER:bytes}|-) %{QS:referrer} %{QS:useragent} \"(?<x_forwarded_for>%{IP:xff_clientip}, .*)\" \"(-|%{IPORHOST:proxy_host})\" \"%{DATA:upstream_addr}\" \"%{DATA:upstream_response_time}\" \"%{NUMBER:request_time}\"",
+          "COMBINEDAPACHELOGX": "%{COMMONAPACHELOGX} %{QS:referrer} %{QS:agent}"
+        }
+      }
+    },
+    {
+        "grok": {
+          "if": "ctx['log']['file']['path'].contains('/usr/local/openresty/nginx/logs/upstream.log')",
+          "field": "request",
+          "ignore_failure" : true,
+          "patterns": ["%{FILEEXTENSION:file_type}"],
+          "pattern_definitions" : {
+            "FILEEXTENSION" : "(\\.[0-9A-Za-z]*)"
+          }
+        }
+      }
+  ]
+}
+
+PUT _template/huya-logging
+{
+    "index_patterns": [
+        "huya*"
+    ],
+    "settings": {
+        "number_of_shards": 4,
+        "number_of_replicas": 0,
+        "final_pipeline": "huya"
+    },
+    "order": 999,
+    "mappings": {
+        "properties": {
+            "@timestamp": {
+                "type": "date"
+            },
+            "request": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "xff_clientip": {
+                "type": "ip",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "request_time": {
+                "type": "float"
+            },
+            "upstream_response_time": {
+                "type": "float"
+            }
+        }
+    }
+}
+

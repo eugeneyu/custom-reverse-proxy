@@ -1,0 +1,100 @@
+POST _ingest/pipeline/_simulate
+{
+  "pipeline": {
+    "description" : "Parse Huya Nginx logs",
+    "processors" : [
+      {
+        "drop": {
+        "if": "ctx['message'].contains('GoogleHC')"
+        }
+      },
+      {
+        "grok": {
+          "if": "ctx['log']['file']['path'].contains('/usr/local/openresty/nginx/logs/upstream.log')",
+          "field": "message",
+          "patterns": ["%{COMMONAPACHELOGX}"],
+          "pattern_definitions" : {
+            "COMMONAPACHELOGX" : "%{IPORHOST:clientip} %{HTTPDUSER:ident} %{USER:auth} \\[%{HTTPDATE:timestamp_ngx}\\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})\" %{NUMBER:response} (?:%{NUMBER:bytes}|-) %{QS:referrer} %{QS:useragent} \"(?<x_forwarded_for>%{IP:xff_clientip}, .*)\" \"(-|%{IPORHOST:proxy_host})\" \"%{DATA:upstream_addr}\" \"%{DATA:upstream_response_time}\" \"%{NUMBER:request_time}\"",
+            "COMBINEDAPACHELOGX": "%{COMMONAPACHELOGX} %{QS:referrer} %{QS:agent}"
+          }
+        }
+      },
+      {
+        "grok": {
+          "if": "ctx['log']['file']['path'].contains('/usr/local/openresty/nginx/logs/upstream.log')",
+          "field": "request",
+          "patterns": ["%{FILEEXTENSION:file_type}"],
+          "pattern_definitions" : {
+            "FILEEXTENSION" : "(.ts|.m3u8)"
+          }
+        }
+      }
+    ]
+  },
+  "docs":[
+    {
+      "top_field": "aaa",
+      "_source": {
+        "@timestamp": "2020-06-01T02:27:15.926Z",
+    "input": {
+      "type": "log"
+    },
+    "ecs": {
+      "version": "1.5.0"
+    },
+    "host": {
+      "hostname": "ig-huya-cdn-proxy-prd-sin-b2fx",
+      "architecture": "x86_64",
+      "os": {
+        "family": "debian",
+        "name": "Ubuntu",
+        "kernel": "5.0.0-1029-gcp",
+        "codename": "bionic",
+        "platform": "ubuntu",
+        "version": "18.04.3 LTS (Bionic Beaver)"
+      },
+      "id": "de1c3972cce6e7fba76193430c3833f2",
+      "name": "ig-huya-cdn-proxy-prd-sin-b2fx",
+      "containerized": false,
+      "ip": [
+        "10.148.0.6",
+        "fe80::4001:aff:fe94:6"
+      ],
+      "mac": [
+        "42:01:0a:94:00:06"
+      ]
+    },
+    "agent": {
+      "id": "768624db-74fd-42bd-8e7b-ea3d3dd38c9b",
+      "version": "7.7.0",
+      "type": "filebeat",
+      "ephemeral_id": "29930b11-a75b-416d-934a-949740f71a45",
+      "hostname": "ig-huya-cdn-proxy-prd-sin-b2fx"
+    },
+    "cloud": {
+      "provider": "gcp",
+      "instance": {
+        "id": "4924860823759380701",
+        "name": "ig-huya-cdn-proxy-prd-sin-b2fx"
+      },
+      "machine": {
+        "type": "n1-standard-4"
+      },
+      "availability_zone": "asia-southeast1-b",
+      "project": {
+        "id": "gcp-huya"
+      }
+    },
+    "user": "test",
+    "source": "/usr/local/openresty/nginx/logs/upstream.log",
+    "log": {
+      "offset": 71600702,
+      "file": {
+        "path": "/usr/local/openresty/nginx/logs/upstream.log"
+      }
+    },
+    "message": "35.191.2.173 - - [15/Jun/2020:03:53:55 +0000] \"GET /src/su1639512564436r2f290b21818eb19c3e52b2c6f027548d.ts?appid=81&id=su1639512564436r2f290b21818eb19c3e52b2c6f027548d&needwm=0 HTTP/1.1\" 200 765 \"https://www.nimo.tv/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36\" \"49.48.237.62, 34.107.159.49\" \"163.171.210.82\" \"163.171.208.207:80 : 163.171.194.242:80 : 163.171.210.83:80 : 163.171.210.82:80\" \"3.004 : 3.004 : 3.000 : 1.516\" \"10.526\""
+      }
+    }
+  ]
+}
