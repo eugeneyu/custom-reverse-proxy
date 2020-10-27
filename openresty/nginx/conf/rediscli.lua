@@ -26,7 +26,6 @@ function _M.exec(self, func)
         return nil, err
     end
 
-    red:select(self.database)
 
     local res, err = func(red)
     if res then
@@ -43,10 +42,10 @@ function _M.new(opts)
     local self = {
         host = config.host or "127.0.0.1",
         port = config.port or 6379,
-        timeout = config.timeout or 1000,
+        timeout = config.timeout or 3000,
         database = config.database or 0,
-        max_idle_time = config.max_idle_time or 10000,
-        pool_size = config.pool_size or 100
+        max_idle_time = config.max_idle_time or 60000,
+        pool_size = config.pool_size or 1000
     }
     return setmetatable(self, mt)
 end
