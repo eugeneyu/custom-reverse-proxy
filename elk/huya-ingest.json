@@ -24,7 +24,7 @@ PUT _ingest/pipeline/huya
         "ignore_failure" : true,
         "patterns": ["%{COMMONAPACHELOGX}"],
         "pattern_definitions" : {
-          "COMMONAPACHELOGX" : "%{IPORHOST:clientip} %{HTTPDUSER:ident} %{USER:auth} \\[%{HTTPDATE:timestamp_ngx}\\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})\" %{NUMBER:response} (?:%{NUMBER:bytes}|-) %{QS:referrer} %{QS:useragent} \"(?<x_forwarded_for>%{IP:xff_clientip}, .*)\" \"(-|%{IPORHOST:proxy_host})\" \"%{DATA:upstream_addr}\" \"%{DATA:upstream_response_time}\" \"%{NUMBER:request_time}\" \"%{WORD:upstream_cache_status}\"",
+          "COMMONAPACHELOGX" : "%{IPORHOST:clientip} %{HTTPDUSER:ident} %{USER:auth} \\[%{HTTPDATE:timestamp_ngx}\\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})\" %{NUMBER:response} (?:%{NUMBER:bytes}|-) %{QS:referrer} %{QS:useragent} \"(?<x_forwarded_for>%{IP:xff_clientip}, .*)\" \"(-|%{WORD:proxy_host})\" \"%{DATA:upstream_addr}\" \"%{DATA:upstream_response_time}\" \"%{NUMBER:request_time}\" \"(-|%{WORD:upstream_cache_status})\"",
           "COMBINEDAPACHELOGX": "%{COMMONAPACHELOGX} %{QS:referrer} %{QS:agent}"
         }
       }
